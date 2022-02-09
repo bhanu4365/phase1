@@ -1,61 +1,74 @@
 package assignment;
-	import java.util.Scanner;
-	import java.io.File;
-	import java.io.FileReader;
-	import java.io.FileWriter;
-	import java.io.IOException;
+	
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
 
+public class FileHandling {
 
-	public class FileHandling 
-	{
-		public void Calculator() throws IOException
-		{
-			Scanner sc = new Scanner(System.in);
-			System.out.println("Enter Operation");
-			int op= sc.nextInt();
-			System.out.println("Enter first number");
-			int s =sc.nextInt();
-			System.out.println("Enter Second number");
-			int p=sc.nextInt();
-			if(op == 1)
-				System.out.println("Addition: "+ (s+p));
-			
-			if(op == 2)
-				System.out.println("Subtraction: "+ (s-p));
-			
-			if(op == 3)
-				System.out.println("Division: "+ (s/p));
+	public static List<String> readFile(String fileName) {
 
-				
-				File file=new File("C:\\file handling\\testFile.txt");
-				
-				if(file.createNewFile())
-				{
-					System.out.println("File is created");
-				}
-				else
-				{
-					System.out.println("File is already Exist");
-				}			
-				
-				FileWriter w=new FileWriter(file);
-				w.append("First num="+s+"\nSecond num="+p+"\nOperaton Done");
-				w.close();
-				
-				FileReader reader= new FileReader("C:\\file handling\\testFile1.txt");
-				int data;
-				while((data=reader.read())!=-1)
-				{
-					System.out.print((char)data);
-				}
-				System.out.println(" ");
-			}
-		
-		public static void main(String[] args) throws IOException
-		{
-			FileHandling f = new FileHandling();
-			f.Calculator();
-			
+		List<String> list = Collections.emptyList();
+		try {
+
+			list = Files.readAllLines(Paths.get(fileName), StandardCharsets.UTF_8);
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
 		}
+		return list;
 	}
 
+	public static void main(String[] args) {
+
+		Scanner sc = new Scanner(System.in);
+		String choice;
+
+		System.out.println("File Handling");
+		System.out.println("1.Read");
+		System.out.println("2.Write");
+		System.out.println("3.Append");
+
+		System.out.println("Enter your choice: ");
+		choice = sc.nextLine();
+
+		if (choice.equals("1")) {
+			
+			System.out.println("Enter file name");
+			String fname=sc.next();
+			List result=readFile("C:\\Users\\HP\\Desktop"+fname);
+			Iterator<String> it = result.iterator();
+			while (it.hasNext()) {
+				System.out.println(it.next());
+			}
+
+		} else if (choice.equals("2")) {
+			try {
+				FileWriter fw = new FileWriter("C:\\Users\\HP\\Desktop\\file.txt");
+				fw.write("Bhanu Teja");
+				fw.close();
+				System.out.println("File write done");
+			} catch (Exception e) {
+				System.out.println("There are some Exception");
+			}
+		} else if (choice.equals("3")) {
+			
+			String filename = ("C:\\Users\\HP\\Desktop\\file.txt");
+			try {
+				
+				BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+				bw.write("How are you");
+				bw.close();
+				System.out.println("Done");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
